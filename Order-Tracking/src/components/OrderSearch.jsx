@@ -2,14 +2,20 @@ import { useState } from "react";
 import { orders } from "../data";
 
 function OrderSearch() {
-  const [orderId, setOrderId] = useState("");
   const [platform, setPlatform] = useState("Amazon");
+  const [orderId, setOrderId] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
   const handleSearch = () => {
+    // ✅ CLEAN USER INPUT
+    const cleanedOrderId = orderId.trim().toUpperCase();
+
+    // ✅ FIND ORDER BASED ON PLATFORM + ORDER ID
     const found = orders.find(
-      (o) => o.id === orderId && o.platform === platform
+      (order) =>
+        order.platform === platform &&
+        order.id.toUpperCase() === cleanedOrderId
     );
 
     if (found) {
@@ -17,7 +23,7 @@ function OrderSearch() {
       setError("");
     } else {
       setResult(null);
-      setError("❌ Order not found for selected website");
+      setError("❌ Order ID not available in selected platform");
     }
   };
 
@@ -26,18 +32,26 @@ function OrderSearch() {
       <h2>🔎 Track Your Order</h2>
 
       <div className="search-input">
-        {/* Website Selection */}
-        <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
-          <option>Amazon</option>
-          <option>Flipkart</option>
-          <option>Zomato</option>
-          <option>Swiggy</option>
+        {/* Platform selection */}
+        <select
+          value={platform}
+          onChange={(e) => {
+            setPlatform(e.target.value);
+            setOrderId("");
+            setResult(null);
+            setError("");
+          }}
+        >
+          <option value="Amazon">Amazon</option>
+          <option value="Flipkart">Flipkart</option>
+          <option value="Zomato">Zomato</option>
+          <option value="Swiggy">Swiggy</option>
         </select>
 
-        {/* Order ID Input */}
+        {/* Order ID input */}
         <input
           type="text"
-          placeholder="Enter Order ID"
+          placeholder="Enter Order ID (e.g. A101)"
           value={orderId}
           onChange={(e) => setOrderId(e.target.value)}
         />
@@ -45,8 +59,10 @@ function OrderSearch() {
         <button onClick={handleSearch}>Search</button>
       </div>
 
+      {/* Error message */}
       {error && <p className="error-text">{error}</p>}
 
+      {/* Order details */}
       {result && (
         <div className="order-details">
           <h3>📦 Order Details</h3>

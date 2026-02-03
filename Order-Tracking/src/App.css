@@ -40,3 +40,21 @@
 .read-the-docs {
   color: #888;
 }
+.available-orders {
+  margin-top: 12px;
+  padding: 10px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.available-orders ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.available-orders li {
+  color: #2563eb;
+  font-weight: 600;
+}
+
