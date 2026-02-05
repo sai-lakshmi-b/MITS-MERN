@@ -1,83 +1,82 @@
-let users = [];
-let id = 1;
+const User = require("../models/user");
+// CREATE USER
+exports.createUser = async (req, res) => {
+  try {
+    const { name, email } = req.body
 
+    if (!name || !email) {
+      return res.status(400).json({ message: "Name and email are required" })
+    }
 
-exports.createUser = (req, res) => {
-  const { name, email } = req.body;
+    // 🔍 Check if user already exists
+    const existingUser = await User.findOne({ email })
 
-  if (!name || !email) {
-    return res.status(400).json({ message: "Name and email are required" });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" })
+    }
+
+    const newUser = await User.create({
+      name,
+      email
+    })
+
+    res.status(201).json(newUser)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
-
-  const newUser = {
-    id: id++,
-    name,
-    email,
-  };
-
-  users.push(newUser);
-
-  res.status(201).json(newUser);
-};
-
-
-exports.getUser = (req, res) => {
-  res.status(200).json(users);
-};
-
-exports.getUserById=(req,res)=>{
-    const user=users.find((t=>t.id===parseInt(req.params.id)))
-    if(user===undefined) return res.status(404).json({message:"User not found"})
 }
-exports.editUser=(req,res)=> {
-    const user=users.find((t=>t.id===parseInt(req.params.id)))
-    if(user===undefined) return res.status(404).json({message:"User not found"})
-    user.name=req.body.name===undefined?user.name:req.body.name
-    user.email=req.body.email||user.email
-    res.status(200).json(user)
-}
+exports.getUser = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
 
-exports.getUserById = (req, res) => {
-  const idParam = parseInt(req.params.id);
-
-  const user = users.find(u => u.id === idParam);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  res.status(200).json(user);
 };
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-exports.editUser = (req, res) => {
-  const idParam = parseInt(req.params.id);
-  const user = users.find(u => u.id === idParam);
+    res.status(200).json(user);
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  if (req.body.name !== undefined) {
-    user.name = req.body.name;
-  }
-
-  if (req.body.email !== undefined) {
-    user.email = req.body.email;
-  }
-
-  res.status(200).json(user);
 };
+exports.editUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
 
-exports.deleteUser = (req, res) => {
-  const idParam = parseInt(req.params.id);
-  const index = users.findIndex(u => u.id === idParam);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  if (index === -1) {
-    return res.status(404).json({ message: "User not found" });
+    res.status(200).json(user);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
+};
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
 
-  users.splice(index, 1);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({ message: "User deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

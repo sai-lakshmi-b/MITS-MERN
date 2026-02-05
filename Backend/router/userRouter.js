@@ -9,4 +9,4 @@ userRoute.post("/", createUser);
 userRoute.put("/:id", editUser);
 userRoute.delete("/:id", deleteUser);
 
-module.exports = userRoute;
+module.exports = userRoute; 
