@@ -15,8 +15,9 @@ import UseReducer from './Hooks/UseReducer'
 import UseMemo from './Hooks/UseMemo'
 import UseCallback from './Hooks/UseCallback'
 import Contacts from './pages/contacts'
+import Todo from './component/Todo'
 const App = () => {
-  const name = "Vikraam";   // ✅ DEFINE NAME HERE
+  const name = "Vikraam";  
 
   return (
     <div>
@@ -29,7 +30,8 @@ const App = () => {
         <Route path='/service' element={<Service name={name} />} />
 
         <Route path='/signup' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login />}/>
+        <Route path='/todo' element={<Todo/>}/>
 
         <Route path='/hook' element={<Hook />}>
           <Route path='usestate' element={<UseState />} />

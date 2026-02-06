@@ -35,14 +35,14 @@ exports.updateTodo = async(req, res) => {
   if (!todo) {
     return res.status(404).json({ message: "todo not found" });
   }
-
+  
   todo.task = req.body.task || todo.task;
   todo.completed =
     req.body.completed === undefined
       ? todo.completed
       : req.body.completed;
   await todo.save();    
-  res.status(200       ).json(todo);
+  res.status(200).json(todo);
  }catch(err){
   res.status(500).send(err);
  }
