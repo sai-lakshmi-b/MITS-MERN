@@ -6,7 +6,7 @@ const Todo = () => {
     const [todo, setTodo] = useState([]);
     const [editId, setEditId] = useState(null);
 
-    const API = "http://localhost:3000";
+    const API = "https://mits-mern-1-rets.onrender.com";
 
     const fetchData = async () => {
         try {
