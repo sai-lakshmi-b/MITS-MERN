@@ -14,7 +14,7 @@ import { Route, Routes } from 'react-router-dom'
 import UseReducer from './Hooks/UseReducer'
 import UseMemo from './Hooks/UseMemo'
 import UseCallback from './Hooks/UseCallback'
-import Contacts from './pages/contacts'
+import Contacts from './pages/Contacts'
 import Todo from './component/Todo'
 const App = () => {
   const name = "Vikraam";  
