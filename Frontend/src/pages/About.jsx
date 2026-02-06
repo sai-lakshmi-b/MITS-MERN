@@ -1,5 +1,5 @@
 import React from "react";
-import Contacts from "./contacts";
+import Contacts from "./Contacts";
 
 const About = (props) => {
   return (
